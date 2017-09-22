@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Welcome Home</title>
+
+{{> /common/_navigation }}
+
+</head>
+<body>
+
+<h1>Apartments!</h1>
+{{#apartments}}
+	<div>
+		<a href="/apartments/{{id}}">{{address}}</a>
+	</div>
+{{/apartments}}
+<br>
+
+</body>
+</html>

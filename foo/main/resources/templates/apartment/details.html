@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Your Home</title>
+{{> /common/_navigation }}
+</head>
+<body>
+	<h1>Only ${{ apartment.rent }}</h1>
+	{{#noUser}}
+		<a href="/login?returnPath=/apartments/{{ apartment.id }}">Login to LIKE this apartment</a>
+		<input type="hidden" name="returnPath" value="{{ returnPath }}">
+	{{/noUser}}
+		
+		Number of Likes: {{ counter }}
+
+		<br>
+		{{#liked}}
+		<form method="post" action="/apartments/{{ apartment.id }}/like">
+			<button>Like this apartment</button>
+		</form>
+		{{/liked}}
+
+		<p>
+		  {{ apartment.address }}<br>
+		  {{ apartment.city }}, {{ apartment.state }} {{ apartment.zip }}
+		</p>
+		<dl>
+		  <dt>Number of bedrooms</dt>
+		  <dd>{{ apartment.numberOfBedrooms }}</dd>
+		  <dt>Number of bathrooms</dt>
+		  <dd>{{ apartment.numberOfBathrooms }}</dd>
+		  <dt>Square footage</dt>
+		  <dd>{{ apartment.squareFootage }}</dd>
+		</dl>
+	<br>
+
+	{{#owner}}
+		{{#apartment.isActive}}
+				<form method="post" action="/apartments/{{ apartment.id }}/deactivations">
+					<button>Deactivate listing</button>
+				</form>
+		{{/apartment.isActive}}
+		<br>
+		
+		{{#inactiveApartment}}
+				<form method="post" action="/apartments/{{ apartment.id }}/activations">
+					<button>Activate listing</button>
+				</form>
+		{{/inactiveApartment}}
+	{{/owner}}
+	
+</body>
+</html>

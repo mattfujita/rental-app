@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sign Up Here</title>
+
+{{> /common/_navigation }}
+
+</head>
+<body>
+<h1>Sign Up Here</h1>
+<form method="post" action="/users">
+First Name: <input type="text" name="first_name" placeholder="First Name" required>
+<br>
+Last Name:<input type="text" name="last_name" placeholder="Last Name" required>
+<br>
+Email: <input type="email" name="email" placeholder="email" required>
+<br>
+Password: <input type="password" name="password" placeholder="password" required>
+<br>
+<button>Sign up</button>
+</form>
+
+</body>
+</html>
