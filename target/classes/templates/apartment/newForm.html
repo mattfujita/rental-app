@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Add New Apartment</title>
+
+</head>
+<body>
+{{> /common/_navigation }}
+<h1>Add New Apartment</h1>
+<form method="post" action="/apartments">
+Number of Bathrooms: <input type="number" name="number_of_bathrooms" placeholder="Number of Bathrooms" required>
+<br>
+Number of Bedrooms:<input type="number" name="number_of_bedrooms" placeholder="Number of Bathrooms" required>
+<br>
+Square Footage: <input type="number" name="square_footage" placeholder="Sq. Footage" required>
+<br>
+Address: <input type="text" name="address" placeholder="address" required>
+<br>
+City: <input type="text" name="city" placeholder="city" required>
+<br>
+State: <input type="text" name="state" placeholder="state" required>
+<br>
+Zip Code: <input type="text" name="zip_code" placeholder="zip code" required>
+<br>
+Rent: <input type="number" name="rent" placeholder="rent" required>
+<br>
+<button>Add listing</button>
+</form>
+
+</body>
+</html>

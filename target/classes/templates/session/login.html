@@ -1,0 +1,20 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login Here</title>
+
+</head>
+<body>
+{{> /common/_navigation }}
+<br>
+<h1>Login Page</h1>
+<form method="post" action="/login">
+<input type="email" name="email" placeholder="email" required>
+<input type="password" name="password" placeholder="password" required>
+<button>Login</button>
+<input type="hidden" name="returnPath" value="{{ returnPath }}">
+</form>
+
+</body>
+</html>
