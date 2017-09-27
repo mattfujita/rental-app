@@ -43,7 +43,7 @@ public class Application {
 			b.saveIt();
 			
 		} 
-		enableCORS("*", "*", "*");
+		enableCORS("http://localhost:4200", "*", "*");
 		//before("/*", SecurityFilters.newSession);
 		
 		path("/apartments", () -> {
@@ -110,13 +110,12 @@ public class Application {
 	        return "OK";
 	    });
 
-	    before((request, response) -> {
-	        response.header("Access-Control-Allow-Origin", origin);
-	        response.header("Access-Control-Request-Method", methods);
-	        response.header("Access-Control-Allow-Headers", headers);
-	        // Note: this may or may not be necessary in your particular application
-	        //response.type("application/json");
-	    });
+        before((request, response) -> {
+            response.header("Access-Control-Allow-Origin", origin);
+            response.header("Access-Control-Request-Method", methods);
+            response.header("Access-Control-Allow-Headers", headers);
+            response.header("Access-Control-Allow-Credentials", "true");
+        });
 	}
 
 }
