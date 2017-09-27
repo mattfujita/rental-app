@@ -66,6 +66,7 @@ public class ApartmentController {
 	};
 
 	public static final Route create = (Request req, Response res) -> {
+		
 		try (AutoCloseableDb db = new AutoCloseableDb()) {
 				Apartment apartment = new Apartment(
 					Integer.parseInt(req.queryParams("square_footage")),
@@ -78,6 +79,7 @@ public class ApartmentController {
 					Integer.parseInt(req.queryParams("rent"))			
 				);
 			User user = req.session().attribute("currentUser");
+					
 			apartment.setIsActive(true);
 			user.add(apartment);
 			apartment.saveIt();

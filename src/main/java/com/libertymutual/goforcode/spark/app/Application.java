@@ -7,6 +7,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import com.libertymutual.goforcode.spark.app.controllers.ApartmentApiController;
 import com.libertymutual.goforcode.spark.app.controllers.ApartmentController;
 import com.libertymutual.goforcode.spark.app.controllers.HomeController;
+import com.libertymutual.goforcode.spark.app.controllers.SessionApiController;
 import com.libertymutual.goforcode.spark.app.controllers.SessionController;
 import com.libertymutual.goforcode.spark.app.controllers.UserApiController;
 import com.libertymutual.goforcode.spark.app.controllers.UserController;
@@ -42,8 +43,9 @@ public class Application {
 			b.saveIt();
 			
 		} 
+		enableCORS("*", "*", "*");
+		//before("/*", SecurityFilters.newSession);
 		
-		//the before will verify a user is logged in before trying to add a new apartment
 		path("/apartments", () -> {
 			before("/new", SecurityFilters.isAuthenticated); 
 			get("/new", ApartmentController.newForm);
@@ -51,8 +53,9 @@ public class Application {
 			before("/mine", SecurityFilters.isAuthenticated); 
 			get("/mine", ApartmentController.index);
 			
-			before("/:id/activations", SecurityFilters.isAuthenticated); 
+			before("/:id/activations", SecurityFilters.isAuthenticated);
 			post("/:id/activations", ApartmentController.update);
+			
 			before("/:id/deactivations", SecurityFilters.isAuthenticated); 
 			post("/:id/deactivations", ApartmentController.update);
 			before("/:id/like", SecurityFilters.isAuthenticated); 
@@ -72,17 +75,48 @@ public class Application {
 		get("/", HomeController.index);
 
 		get("/login", SessionController.newForm);
-		post("/login", SessionController.create);
 		get("/signup", UserController.newForm);
+
+		post("/login", SessionController.create);
+		
 		post("/logout", SessionController.destroy);
 		
 		path("/api", () -> {
+			get("/apartments", ApartmentApiController.index);
 			get("/apartments/:id", ApartmentApiController.details);
 			post("/apartments", ApartmentApiController.create);
 			get("/users/:id", UserApiController.details);
 			post("/users", UserApiController.create);
+			post("/sessions", SessionApiController.create);
 		});
 		
+	}
+	
+	// Enables CORS on requests. This method is an initialization method and should be called once.
+	private static void enableCORS(final String origin, final String methods, final String headers) {
+
+	    options("/*", (request, response) -> {
+
+	        String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
+	        if (accessControlRequestHeaders != null) {
+	            response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+	        }
+
+	        String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
+	        if (accessControlRequestMethod != null) {
+	            response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+	        }
+
+	        return "OK";
+	    });
+
+	    before((request, response) -> {
+	        response.header("Access-Control-Allow-Origin", origin);
+	        response.header("Access-Control-Request-Method", methods);
+	        response.header("Access-Control-Allow-Headers", headers);
+	        // Note: this may or may not be necessary in your particular application
+	        //response.type("application/json");
+	    });
 	}
 
 }

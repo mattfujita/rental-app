@@ -3,6 +3,7 @@ package com.libertymutual.goforcode.spark.app.controllers;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.javalite.activejdbc.Base;
 import org.mindrot.jbcrypt.BCrypt;
@@ -34,7 +35,8 @@ public class SessionController {
 		try (AutoCloseableDb db = new AutoCloseableDb()) {
 			User user = User.findFirst("email = ?", email);
 			if(user != null && BCrypt.checkpw(password, user.getPassword())) {
-				req.session().attribute("currentUser", user);
+				req.session().attribute("currentUser", user);	
+
 			}
 		}
 		res.redirect(req.queryParamOrDefault("returnPath", "/"));
