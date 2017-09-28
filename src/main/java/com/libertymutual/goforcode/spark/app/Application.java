@@ -83,11 +83,15 @@ public class Application {
 		
 		path("/api", () -> {
 			get("/apartments", ApartmentApiController.index);
+			get("/apartments/mine", ApartmentApiController.mine);
 			get("/apartments/:id", ApartmentApiController.details);
 			post("/apartments", ApartmentApiController.create);
+			post("/apartments/activations", ApartmentApiController.update);
+			post("/apartments:id/deactivations", ApartmentApiController.update);
 			get("/users/:id", UserApiController.details);
 			post("/users", UserApiController.create);
 			post("/sessions", SessionApiController.create);
+			delete("/sessions/mine", SessionApiController.destroy);
 		});
 		
 	}

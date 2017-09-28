@@ -21,6 +21,8 @@ import spark.Route;
 
 public class ApartmentApiController {
 	
+	
+	
 	public static final Route details = (Request req, Response res) -> {
 		try (AutoCloseableDb db = new AutoCloseableDb()) {
 			String idAsString = req.params("id");
@@ -38,39 +40,75 @@ public class ApartmentApiController {
 	
 	public static final Route create = (Request req, Response res) -> {
 
-			String apartmentJson = req.body();
-			Map map = JsonHelper.toMap(apartmentJson);
-			Apartment apartment = new Apartment();
-			apartment.fromMap(map);
-		
 			try (AutoCloseableDb db = new AutoCloseableDb()) {
+				
+				String apartmentJson = req.body();
+				System.out.println(apartmentJson);
+				Map map = JsonHelper.toMap(apartmentJson);
+			
+				Apartment apartment = new Apartment();
+				apartment.fromMap(map);
+				
+				User user = req.session().attribute("currentUser");
+
+				apartment.setIsActive(true);
+				user.add(apartment);
 				apartment.saveIt();
-				res.status(201);
-				return apartment.toJson(true);
+				
+				res.header("Content-Type", "application/json");
+				return apartment.toJson(true); 
+				
 			}
+
 		
 	};
 
 	public static final Route index = (Request req, Response res) -> {
 		
 		try(AutoCloseableDb db = new AutoCloseableDb()) {
-
-			LazyList<Apartment> activeApartments = Apartment.where("is_active = ?", true);
-			res.header("Content-Type", "application/json");
-			return activeApartments.toJson(true);
-			//List<String> apartments = new ArrayList<String>();
 			
-//			if(activeApartments != null) {
-//				res.header("Content-Type", "application/json");
-//				for (Apartment a : activeApartments) {
-//					apartments.add(a.toJson(true));
-//					return apartments;
-//				}
-//			}
-//			notFound("No active apartments found.");
-//			return "";
+			User user = req.session().attribute("currentUser");
+
+			LazyList<Apartment> apartments = Apartment.findAll();
+			res.header("Content-Type", "application/json");
+			return apartments.toJson(true);
 		}
 		
+	};
+	
+	public static final Route mine = (Request req, Response res) -> {
+
+		try(AutoCloseableDb db = new AutoCloseableDb()) {
+			User user = req.session().attribute("currentUser");
+
+			LazyList<Apartment> apartments = Apartment.where("user_id = ?", user.getId());
+			res.header("Content-Type", "application/json");
+			return apartments.toJson(true);
+		}
+		
+	};
+
+		public static final Route update = (Request req, Response res) -> {
+		
+			Apartment tempApartment = new Apartment();
+			String apartmentJson = req.body();
+			tempApartment.fromMap(JsonHelper.toMap(apartmentJson));
+		
+		try(AutoCloseableDb db = new AutoCloseableDb()) {
+			
+			Apartment apartment = Apartment.findById(tempApartment.getId());
+			System.out.println(apartment);
+
+			if(apartment.getIsActive() == false) { 
+				apartment.setIsActive(true);
+			} else {
+				apartment.setIsActive(false);
+			}
+			
+			apartment.saveIt();
+			res.header("Content-Type", "application/json");
+			return apartment.toJson(true);
+		}
 	};
 	
 }
