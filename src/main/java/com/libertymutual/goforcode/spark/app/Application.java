@@ -84,14 +84,17 @@ public class Application {
 		path("/api", () -> {
 			get("/apartments", ApartmentApiController.index);
 			get("/apartments/mine", ApartmentApiController.mine);
-			get("/apartments/:id", ApartmentApiController.details);
+			get("/apartments/details", ApartmentApiController.details);
 			post("/apartments", ApartmentApiController.create);
 			post("/apartments/activations", ApartmentApiController.update);
 			post("/apartments:id/deactivations", ApartmentApiController.update);
-			get("/users/:id", UserApiController.details);
+			post("apartments/likes", ApartmentApiController.getLikes);
+			post("/apartments/like", ApartmentApiController.createLike);
 			post("/users", UserApiController.create);
+			get("/users/:id", UserApiController.details);
 			post("/sessions", SessionApiController.create);
 			delete("/sessions/mine", SessionApiController.destroy);
+			post("/sessions/mine", SessionApiController.check);
 		});
 		
 	}

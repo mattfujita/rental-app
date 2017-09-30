@@ -46,4 +46,16 @@ public class SessionApiController {
 		return "{}";
 	};
 
+	public static final Route check = (Request req, Response res) -> {
+		User user = req.session().attribute("currentUser");
+		try(AutoCloseableDb db = new AutoCloseableDb()) {
+			
+			if(user != null) {
+				res.header("Content-Type", "application/json");
+				return user.toJson(true);
+			}
+		}
+		return "";
+	};
+
 }
